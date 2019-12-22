@@ -3,77 +3,64 @@
 
 using namespace std;
 
-Queue::Queue(){ // constructor
-    front = -1;
-    rear = -1;
-    for(int i=0; i < 5; i++){
-        arr[i] = 0;
-    }
+Queue::Queue(){
+    front = NULL; // start with front equal NULL
+    rear = NULL; // start with rear equal NULL
 }
 
 bool Queue::isEmpty(){
-    if(front == -1 && rear == -1){
+    if(front == NULL && rear == NULL){ 
+        cout << "Queue is empty" << endl;
         return true;
     }
     else{
+        cout << "Queue is not empty" << endl;
         return false;
     }
 }
 
-bool Queue::isFull(){
-    if(rear == size(arr) - 1){
-        return true;
+void Queue::enqueue(int data){
+    Node *n = new Node(data);
+    if(rear == NULL){
+        front = n;
+        rear = n;
     }
     else{
-        return false;
+        rear->next = n;
+        rear = n;
     }
-}
-
-void Queue::enqueue(int val){
-    if(isFull){
-        cout << "queue is full" << endl;
-        return;
-    }
-    else if(isEmpty()){
-        front = 0;  // both for index 0
-        rear = 0;
-        arr[rear] = val;
-    }
-    else{
-        rear++;
-        arr[rear] = val;
-    }
+    cout << "Euqueue value: " << data << endl;
 }
 
 int Queue::dequeue(){
-    int x = 0;
-    if(isEmpty()){
-        cout << "queue is empty" << endl;
-        return 0;
+    if(front == NULL){ // 비어있을 때
+        cout << "Queue is empty" << endl;
+        return -1;
     }
-    else if(front == rear){
-        x = arr[front];
-        arr[front] = 0;
-        front = -1;
-        rear = -1;
-        return x;
+
+    Node *temp = front;
+    int dequeueValue = front->data;
+    if(front == rear){ // 하나만 있을 때
+        front = NULL;
+        rear = NULL;
     }
-    else{
-        x = arr[front];
-        arr[front] = 0;
-        front++;
-        return x; 
+    else{ // 두 개 이상
+        front = front->next;
     }
+    delete temp;
+    cout << "Dequeue value: " << dequeueValue << endl;
+    return dequeueValue;
+    
 }
 
 int Queue::count(){
-    int num = rear - front + 1;
-    return num;
-}
-
-void Queue::display(){
-    for(int i = front; i >=rear; i--){
-        cout << arr[i] << endl;
-    }
+    int count = 0;
+    Node *current = front; 
+    while(current != NULL){
+        current = current->next;
+        count++; 
+    } 
+    cout << "Number of elements so far: " << count << endl;
+    return count;
 }
 
